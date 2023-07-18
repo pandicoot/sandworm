@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab68bc597b5b4a7da0c4b9fcc607af4, type: 3}
+  m_Name: Bronze Shortsword
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: bronze_shortsword
+  <Sprite>k__BackingField: {fileID: 1042550330, guid: 94090ce2e152249eeae1b4d69811a9e4, type: 3}
+  <Description>k__BackingField: An ordinary shortsword. Good for fighting.
+  <Tags>k__BackingField: []
+  <StackLimit>k__BackingField: 0
+  _weaponComponent: {fileID: 11400000, guid: f56741aa958204e8aa7b6cfc8c236298, type: 2}
+  _projectileComponent: {fileID: 0}
+  _buildComponent: {fileID: 0}
+  _destructComponent: {fileID: 0}

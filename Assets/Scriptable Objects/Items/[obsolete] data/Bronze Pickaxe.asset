@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33094621afa3e4c59bba8c3713ab9644, type: 3}
+  m_Name: Bronze Pickaxe
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: bronze_pickaxe
+  <Sprite>k__BackingField: {fileID: 0}
+  <Description>k__BackingField: An ordinary pickaxe. Good  for mining.
+  <Tags>k__BackingField: []
+  <Components>k__BackingField:
+  - {fileID: 11400000, guid: 6809e8933c3f944adb8cd27f081adb14, type: 2}
+  <WeaponComponent>k__BackingField: {fileID: 11400000, guid: eee4b507402df4fcaac4860deae5bcda, type: 2}
+  <DestructComponent>k__BackingField: {fileID: 11400000, guid: c08ee5b72813349bc85b41e3b413872e, type: 2}
+  <BuildComponent>k__BackingField: {fileID: 11400000, guid: c08ee5b72813349bc85b41e3b413872e, type: 2}

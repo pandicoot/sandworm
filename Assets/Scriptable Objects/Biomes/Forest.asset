@@ -1,0 +1,200 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b193d323f3a96443c93418f6b57a2d20, type: 3}
+  m_Name: Forest
+  m_EditorClassIdentifier: 
+  Type: 0
+  SurfaceHeightMultiplier: 50
+  SurfaceHeightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7254889
+      value: 0.773812
+      inSlope: 1.21765
+      outSlope: 1.21765
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.39621437
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.4977502
+      outSlope: 0.4977502
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.6722672
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Strata:
+  - Tile: 1
+    Thickness: 2
+  - Tile: 2
+    Thickness: 30
+  - Tile: 3
+    Thickness: 150
+  - Tile: 5
+    Thickness: 200
+  BackgroundStrata:
+  - Tile: 0
+    Thickness: 1
+  - Tile: 8
+    Thickness: 16
+  - Tile: 9
+    Thickness: 200
+  StratumInterfaces:
+  - IndexOfAboveStratum: 0
+    TileAbove: 1
+    TileBelow: 2
+    DoDither: 0
+    DitheringWidth: 0
+    DitherSize: 1
+    DitheringCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  - IndexOfAboveStratum: 1
+    TileAbove: 2
+    TileBelow: 3
+    DoDither: 1
+    DitheringWidth: 4
+    DitherSize: 1
+    DitheringCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  - IndexOfAboveStratum: 2
+    TileAbove: 3
+    TileBelow: 5
+    DoDither: 1
+    DitheringWidth: 8
+    DitherSize: 1
+    DitheringCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  BackgroundStratumInterfaces:
+  - IndexOfAboveStratum: 1
+    TileAbove: 8
+    TileBelow: 9
+    DoDither: 1
+    DitheringWidth: 6
+    DitherSize: 0
+    DitheringCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  SurfaceNoiseParameters:
+    Scale: 100
+    Octaves: 4
+    Persistence: 0.4
+    Lacunarity: 1.06
+  PrincipalCaveBiome: {fileID: 11400000, guid: b7fa8aa34bccf44369d3d94eeca2f753, type: 2}
+  AuxiliaryCaveBiome: {fileID: 11400000, guid: 8166799ac01e24753bf51b01f8c3dad9, type: 2}
+  Trees:
+  - {fileID: 1223163962494669383, guid: 3bf41d33b39bf407e830df81b52d7239, type: 3}
+  TreeSpawnDepth: 4
+  MaxRMSSteepnessForTreeSpawns: 0.85
+  TreeSpawnProbability: 0.03
+  MutualExclusionDistanceForTreeSpawns: 20

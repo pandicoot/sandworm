@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab68bc597b5b4a7da0c4b9fcc607af4, type: 3}
+  m_Name: Dirt
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: dirt
+  <Sprite>k__BackingField: {fileID: 822030182, guid: 4b88d35dd42d74efc9db446012c65a88, type: 3}
+  <Description>k__BackingField: 
+  <Tags>k__BackingField: []
+  <StackLimit>k__BackingField: 99
+  _weaponComponent: {fileID: 0}
+  _projectileComponent: {fileID: 0}
+  _buildComponent: {fileID: 11400000, guid: bd371bc628190470c964cb3ed8c0027d, type: 2}
+  _destructComponent: {fileID: 0}
