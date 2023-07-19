@@ -34,28 +34,28 @@ public class PlayerModifyWorldController : ModifyWorldController
             TryDestruct(_camera.ScreenToWorldPoint(InputManager.Actions.gameplay.mouse_position.ReadValue<Vector2>()), GeneratorManager.TileLayerIndices.Principal);
         }
 
-        if (InputManager.Actions.ui.next.WasPressedThisFrame())
-        {
-            if ((int)TileToBuildWith == (int)TileManager.AllPhysicalTilesList[TileManager.AllPhysicalTilesList.Count - 1])
-            {
-                TileToBuildWith = (Tiles)1;
-            }
-            else
-            {
-                TileToBuildWith++;
-            }
-        }
-        else if (InputManager.Actions.ui.previous.WasPressedThisFrame())
-        {
-            if ((int)TileToBuildWith == 1)
-            {
-                TileToBuildWith = TileManager.AllPhysicalTilesList[TileManager.AllPhysicalTilesList.Count - 1];
-            }
-            else
-            {
-                TileToBuildWith--;
-            }
-        }
+        //if (InputManager.Actions.ui.next.WasPressedThisFrame())
+        //{
+        //    if ((int)TileToBuildWith == (int)TileManager.AllPhysicalTilesList[TileManager.AllPhysicalTilesList.Count - 1])
+        //    {
+        //        TileToBuildWith = (Tiles)1;
+        //    }
+        //    else
+        //    {
+        //        TileToBuildWith++;
+        //    }
+        //}
+        //else if (InputManager.Actions.ui.previous.WasPressedThisFrame())
+        //{
+        //    if ((int)TileToBuildWith == 1)
+        //    {
+        //        TileToBuildWith = TileManager.AllPhysicalTilesList[TileManager.AllPhysicalTilesList.Count - 1];
+        //    }
+        //    else
+        //    {
+        //        TileToBuildWith--;
+        //    }
+        //}
 
         //Debug.Log(Input.GetAxisRaw("Mouse ScrollWheel"));
         //_currScrollDelta += Input.GetAxisRaw("Mouse ScrollWheel");

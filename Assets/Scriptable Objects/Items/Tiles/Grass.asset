@@ -20,4 +20,5 @@ MonoBehaviour:
   _weaponComponent: {fileID: 0}
   _projectileComponent: {fileID: 0}
   _buildComponent: {fileID: 11400000, guid: bd371bc628190470c964cb3ed8c0027d, type: 2}
+  <TileToBuildWith>k__BackingField: 1
   _destructComponent: {fileID: 0}

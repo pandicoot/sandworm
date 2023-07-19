@@ -66,6 +66,8 @@ public abstract class ModifyWorldController : MonoBehaviour
 
     protected void TryBuild(Vector2 position, GeneratorManager.TileLayerIndices layerIndex)
     {
+        Debug.Log($"{TileToBuildWith}, {BuildTool}, {BuildSpeed}");
+
         if (BuildTool == null || BuildSpeed < 0)
         {
             return;
@@ -109,11 +111,13 @@ public abstract class ModifyWorldController : MonoBehaviour
         {
             BuildTool = newHeldItem.BuildComponent.Tool;
             BuildSpeed = newHeldItem.BuildComponent.Speed;
+            TileToBuildWith = newHeldItem.TileToBuildWith;
         }
         else
         {
             BuildTool = DefaultBuildTool;
             BuildSpeed = DefaultBuildSpeed;
+            TileToBuildWith = Tiles.Grass;
         }
 
         if (newHeldItem.DestructComponent)

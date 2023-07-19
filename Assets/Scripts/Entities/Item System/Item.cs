@@ -83,6 +83,7 @@ public sealed class Item : Prototype, IEquatable<Item>
             _buildComponent = value;
         }
     }
+    [field: SerializeField] public Tiles TileToBuildWith { get; private set; }
 
     [SerializeField] private ToolComponent _destructComponent;
     public ToolComponent DestructComponent
@@ -176,6 +177,7 @@ public sealed class Item : Prototype, IEquatable<Item>
         {
             var newBuildComponent = (ToolComponent)BuildComponent.Clone();
             newItem.BuildComponent = newBuildComponent;
+            newItem.TileToBuildWith = TileToBuildWith;
         }
 
         return newItem;
