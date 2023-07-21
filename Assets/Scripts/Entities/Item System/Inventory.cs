@@ -10,7 +10,7 @@ public class Inventory
     public ItemStack[] Slots { get; private set; }
     public int InventorySize { get; protected set; }
 
-    public Item Selected { get; private set; }
+    public Item Selected { get; private set; }  // TODO: remove
     public int IndexOfSelectedItem { get; private set; }
 
     //private Item _prevSelected { get; set; }
@@ -132,6 +132,16 @@ public class Inventory
         }
 
         return Slots[idx].RemoveAll();
+    }
+
+    public Item GetSelected()
+    {
+        return Slots[IndexOfSelectedItem].Item;
+    }
+
+    public void OnConsumeSelected()  // TODO don't remove if it is a 'build tool'
+    {
+        RemoveItem(IndexOfSelectedItem, 1);
     }
 
     //public void SwapItem(int idxFrom, int idxTo)

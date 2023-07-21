@@ -2310,7 +2310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a0ff5976ad24555a396acd246c1afb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <_inventoryIdx>k__BackingField: 1
+  <InventoryIdx>k__BackingField: 1
   <DefaultBuildTool>k__BackingField: {fileID: 11400000, guid: 033c19f59ad224fc799866eb9a392d1d, type: 2}
   <DefaultDestructTool>k__BackingField: {fileID: 11400000, guid: 033c19f59ad224fc799866eb9a392d1d, type: 2}
   <DefaultBuildSpeed>k__BackingField: 1

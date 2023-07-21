@@ -1,36 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ModifyWorldController : MonoBehaviour
+public abstract class ModifyWorldController : MonoBehaviour, IConsumeSelectedItem
 {
-    public Transform Transform { get; protected set; }
-    private Inventories _inventories { get; set; }
-    [field: SerializeField] private int _inventoryIdx { get; set; }
-    private Inventory _inventory { get; set; }
+    //private Inventories _inventories { get; set; }
+    [field: SerializeField] public int InventoryIdx { get; private set; }
+    //public Inventory Inventory { get; set; }
+    public Func<Item> GetItem { get; set; }  // using a Func here means that this class doesn't have access to all of Inventory's methods.
+    public event Action OnConsume;
+
     private ModifyWorld ModifyWorld { get; set; }
     private ModifyOverlay Overlay { get; set; }
 
     public CarverHead BuildTool { get; set; }
     public CarverHead DestructTool { get; set; }
+    public Tiles TileToBuildWith { get; set; }
+    public float BuildSpeed { get; protected set; }
+    public float DestructSpeed { get; protected set; }
     [field: SerializeField] protected CarverHead DefaultBuildTool { get; set; }
     [field: SerializeField] protected CarverHead DefaultDestructTool { get; set; }
     [field: SerializeField] public float DefaultBuildSpeed { get; protected set; }
     [field: SerializeField] public float DefaultDestructSpeed { get; protected set; }
 
-    public Tiles TileToBuildWith { get; set; }
-    public float BuildSpeed { get; protected set; }
-    public float DestructSpeed { get; protected set; }
-
     public bool OnBuildCooldown { get; protected set; }
     public bool OnDestructCooldown { get; protected set; }
 
-    public bool HasInventory { get => _inventory != null; }
-
     protected virtual void Awake()
     {
-        Transform = transform;
-        _inventories = GetComponent<Inventories>();
+        //_inventories = GetComponent<Inventories>();
         ModifyWorld = GetComponent<ModifyWorld>();
         Overlay = GetComponentInChildren<ModifyOverlay>();
         BuildTool = DefaultBuildTool;
@@ -39,10 +38,10 @@ public abstract class ModifyWorldController : MonoBehaviour
         TileToBuildWith = Tiles.Grass;
     }
 
-    private void Start()
-    {
-        _inventory = _inventories.inventories[_inventoryIdx];
-    }
+    //private void Start()
+    //{
+    //    //Inventory = _inventories.inventories[_inventoryIdx];
+    //}
 
     //private void OnEnable()
     //{
@@ -66,6 +65,8 @@ public abstract class ModifyWorldController : MonoBehaviour
 
     protected void TryBuild(Vector2 position, GeneratorManager.TileLayerIndices layerIndex)
     {
+        UpdateTools(GetItem?.Invoke());
+
         Debug.Log($"{TileToBuildWith}, {BuildTool}, {BuildSpeed}");
 
         if (BuildTool == null || BuildSpeed < 0)
@@ -78,11 +79,14 @@ public abstract class ModifyWorldController : MonoBehaviour
             ModifyWorld.Build(position, layerIndex, BuildTool, TileToBuildWith);
             OnBuildCooldown = true;
             StartCoroutine(DoBuildCooldown(1 / (float)BuildSpeed));
+            OnConsume?.Invoke();  // TODO: pass in int saying how many to consume -- actually should check beforehand 
         }
     }
 
     protected void TryDestruct(Vector2 position, GeneratorManager.TileLayerIndices layerIndex)
     {
+        UpdateTools(GetItem?.Invoke());
+
         if (DestructTool == null || DestructSpeed < 0)
         {
             return;
@@ -134,10 +138,12 @@ public abstract class ModifyWorldController : MonoBehaviour
 
     protected virtual void Update()
     {
-        UpdateTools(_inventory.Selected);
+        
         // update sizing for overlay object
         Overlay.UpdateSize(new Vector2Int(BuildTool.PrimarySize, BuildTool.SecondarySize));
     }
+
+
 
     //private void OnDisable()
     //{

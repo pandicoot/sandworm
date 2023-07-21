@@ -17,6 +17,8 @@ public class Inventories : MonoBehaviour
 
     private bool _hasClicked { get; set; }
 
+    private HashSet<IUseInventory>[] _inventoryUsers;
+
     private void Awake()
     {
         inventories = new Inventory[NInventories];
@@ -24,6 +26,17 @@ public class Inventories : MonoBehaviour
         {
             inventories[i] = new Inventory(InventorySizes[i]);
         }
+        _inventoryUsers = new HashSet<IUseInventory>[NInventories];
+        for (int i = 0; i < NInventories; i++)
+        {
+            _inventoryUsers[i] = new HashSet<IUseInventory>();
+        }
+
+        // injections (push up to EntityBase?)
+        // temporary.
+        // ideally only called once for each component
+        var invConsumers = GetComponents<IConsumeSelectedItem>();
+        Array.ForEach(invConsumers, c => InjectInventory(c));
     }
 
     private void Start()
@@ -37,6 +50,27 @@ public class Inventories : MonoBehaviour
         inventories[0].AddItem(new ItemStack(ItemManager.GetNewItem("bronze_shortsword"), 1));
         inventories[0].AddItem(new ItemStack(ItemManager.GetNewItem("bow"), 1));
     }
+
+    public void InjectInventory(IUseInventory invUser)
+    {
+        var idx = invUser.InventoryIdx;
+        if (!_inventoryUsers[idx].Contains(invUser))
+        {
+            _inventoryUsers[idx].Add(invUser);
+        }
+    }
+    public void InjectInventory(IUseSelectedItem invUser)  
+    {
+        InjectInventory((IUseInventory)invUser);
+        invUser.GetItem = inventories[invUser.InventoryIdx].GetSelected;
+    }
+    public void InjectInventory(IConsumeSelectedItem invUser)
+    {
+        InjectInventory((IUseSelectedItem)invUser);
+        invUser.OnConsume -= inventories[invUser.InventoryIdx].OnConsumeSelected;  // TODO: check that this works to prevent OnConsumeSelected being called multiple times
+        invUser.OnConsume += inventories[invUser.InventoryIdx].OnConsumeSelected;  
+    }
+
 
     public void OnClickedItemDisplay(int inventoryIdx, int slotIdx)
     {
