@@ -34,9 +34,13 @@ public class Inventories : MonoBehaviour
 
         // injections (push up to EntityBase?)
         // temporary.
-        // ideally only called once for each component
-        var invConsumers = GetComponents<IConsumeSelectedItem>();
-        Array.ForEach(invConsumers, c => InjectInventory(c));
+        // ideally only called once for each component, but injection methods should be idempotent
+        var invSelectedItemUsers = GetComponents<IUseSelectedItem>();
+        Array.ForEach(invSelectedItemUsers, c => InjectInventory(c));
+        //var invConsumers = GetComponents<IConsumeSelectedItem>();
+        //Array.ForEach(invConsumers, c => InjectInventory(c));
+        //var invAttackers = GetComponents<IAttackWithSelectedItem>();
+        //Array.ForEach(invAttackers, a => InjectInventory(a));
     }
 
     private void Start()
@@ -64,12 +68,18 @@ public class Inventories : MonoBehaviour
         InjectInventory((IUseInventory)invUser);
         invUser.GetItem = inventories[invUser.InventoryIdx].GetSelected;
     }
-    public void InjectInventory(IConsumeSelectedItem invUser)
-    {
-        InjectInventory((IUseSelectedItem)invUser);
-        invUser.OnConsume -= inventories[invUser.InventoryIdx].OnConsumeSelected;  // TODO: check that this works to prevent OnConsumeSelected being called multiple times
-        invUser.OnConsume += inventories[invUser.InventoryIdx].OnConsumeSelected;  
-    }
+    //public void InjectInventory(IConsumeSelectedItem invUser)
+    //{
+    //    InjectInventory((IUseSelectedItem)invUser);
+    //    invUser.OnConsume -= inventories[invUser.InventoryIdx].OnConsumeSelected;  
+    //    invUser.OnConsume += inventories[invUser.InventoryIdx].OnConsumeSelected;  
+    //}
+    //public void InjectInventory(IAttackWithSelectedItem invUser)
+    //{
+    //    InjectInventory((IUseSelectedItem)invUser);
+    //    invUser.OnTryAttackWith -= inventories[invUser.InventoryIdx].OnAttackWith;
+    //    invUser.OnTryAttackWith += inventories[invUser.InventoryIdx].OnAttackWith;
+    //}
 
 
     public void OnClickedItemDisplay(int inventoryIdx, int slotIdx)
@@ -136,19 +146,19 @@ public class Inventories : MonoBehaviour
         return fullyPickedUp;
     }
 
-    private void Update()
-    {
-        Array.ForEach<Inventory>(inventories, inv => inv.UpdateInventory());
+    //private void Update()
+    //{
+    //    Array.ForEach<Inventory>(inventories, inv => inv.UpdateInventory());
 
-        Debug.Log(_follow.ItemStack);
-        for (int i = 0; i < NInventories; i++)
-        {
-            string s = $"Inventory {i}: \n";
-            for (int j = 0; j < inventories[i].InventorySize; j++)
-            {
-                s += $"{inventories[i].Slots[j]}, ";
-            }
-            Debug.Log(s);
-        }
-    }
+    //    //Debug.Log(_follow.ItemStack);
+    //    //for (int i = 0; i < NInventories; i++)
+    //    //{
+    //    //    string s = $"Inventory {i}: \n";
+    //    //    for (int j = 0; j < inventories[i].InventorySize; j++)
+    //    //    {
+    //    //        s += $"{inventories[i].Slots[j]}, ";
+    //    //    }
+    //    //    Debug.Log(s);
+    //    //}
+    //}
 }

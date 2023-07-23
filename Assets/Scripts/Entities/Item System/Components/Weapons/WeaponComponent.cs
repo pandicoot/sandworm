@@ -10,8 +10,12 @@ public class WeaponComponent : ItemComponent, IEquatable<WeaponComponent>
 
     [field: SerializeField] public EntityAttackStats AttackStats { get; private set; }
 
-    private Item _item;
-    public override Item Item { get => _item; set => _item = value; }
+    public override Item Item { get => _item;
+        set
+        {
+            _item = value;
+        }
+    }
 
     //public WeaponComponent(WeaponComponentData data)
     //{

@@ -7,7 +7,7 @@ public abstract class CarverHead : Prototype, ICarve
     public abstract int PrimarySize { get; set; }
     public abstract int SecondarySize { get; set; }
 
-    public abstract HashSet<(Vector2Int, Tiles)> Carve(Vector2 worldPosition, SpatialArray<Tiles> map, Tiles tileToReplaceWith, HashSet<Tiles> tileDomain);
+    public abstract HashSet<(Vector2Int, Tiles)> Carve(Vector2 worldPosition, SpatialArray<Tiles> map, Tiles tileToReplaceWith, HashSet<Tiles> tileDomain, int limit = int.MaxValue);
 
     // Represents a function defined over the interval [-1, 1] 
     // with values ranging from 0 to 1. Returns true if a sample point

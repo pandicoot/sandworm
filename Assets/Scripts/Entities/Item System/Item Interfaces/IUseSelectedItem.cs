@@ -2,5 +2,5 @@ using System;
 
 public interface IUseSelectedItem : IUseInventory
 {
-    public Func<Item> GetItem { set; }
+    public Func<(Item, int)> GetItem { set; }
 }

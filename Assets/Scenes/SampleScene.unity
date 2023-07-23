@@ -739,7 +739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <BaseAttackStats>k__BackingField: {fileID: 0}
-  <_inventoryIdx>k__BackingField: 0
+  <InventoryIdx>k__BackingField: 0
 --- !u!114 &209277699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1833,7 +1833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <BaseAttackStats>k__BackingField: {fileID: 0}
-  <_inventoryIdx>k__BackingField: 0
+  <InventoryIdx>k__BackingField: 0
 --- !u!114 &635223304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2246,7 +2246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <BaseAttackStats>k__BackingField: {fileID: 11400000, guid: 155a7c11938da4aabb30942de1bff8df, type: 2}
-  <_inventoryIdx>k__BackingField: 1
+  <InventoryIdx>k__BackingField: 1
 --- !u!114 &672676053
 MonoBehaviour:
   m_ObjectHideFlags: 0

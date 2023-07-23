@@ -6,23 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Projectile Component", menuName = "Scriptable Objects/Item Components/Projectile")]
 public class ProjectileComponent : ItemComponent, IInstantiateEntity, IEquatable<ProjectileComponent>
 {
-    private Item _item;
     public override Item Item
     {
         get => _item;
         set
         {
-            if (_item)
-            {
-                _item.OnAttackWith -= FireProjectile;
-            }
-
-            if (value)
-            {
-                value.OnAttackWith += FireProjectile;
-            }
-            _item = value;
-            
+            _item = value; 
         }
     }
 
@@ -36,7 +25,7 @@ public class ProjectileComponent : ItemComponent, IInstantiateEntity, IEquatable
     public bool OnCooldown { get; private set; }
 
     // TODO: isn't listening to ActiveAttacker?
-    public void FireProjectile(Attack attack)
+    private void FireProjectile(Attack attack)
     {
         if (!OnCooldown)
         {
@@ -54,6 +43,11 @@ public class ProjectileComponent : ItemComponent, IInstantiateEntity, IEquatable
             OnCooldown = true;
             attack.Attacker.StartCoroutine(DoCooldown(1 / ProjectileStats.BaseFireRate));
         }
+    }
+
+    public override void OnAttackWith(Attack atk)
+    {
+        FireProjectile(atk);
     }
 
     private IEnumerator DoCooldown(float duration)

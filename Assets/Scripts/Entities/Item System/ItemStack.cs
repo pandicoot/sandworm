@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemStack 
 {
 
-    public const int DefaultStackCapacity = 81;
+    public const int DefaultStackCapacity = 729;
     public Item Item { get; private set; }
 
     public int Count { get; set; }

@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ModifyWorldController : MonoBehaviour, IConsumeSelectedItem
+public abstract class ModifyWorldController : MonoBehaviour, IUseSelectedItem
 {
-    //private Inventories _inventories { get; set; }
     [field: SerializeField] public int InventoryIdx { get; private set; }
-    //public Inventory Inventory { get; set; }
-    public Func<Item> GetItem { get; set; }  // using a Func here means that this class doesn't have access to all of Inventory's methods.
-    public event Action OnConsume;
+    public Func<(Item, int)> GetItem { get; set; }  // using a Func here means that this class doesn't have access to all of Inventory's methods.
+    //public event Action<int> OnConsume;
 
     private ModifyWorld ModifyWorld { get; set; }
     private ModifyOverlay Overlay { get; set; }
@@ -65,9 +63,21 @@ public abstract class ModifyWorldController : MonoBehaviour, IConsumeSelectedIte
 
     protected void TryBuild(Vector2 position, GeneratorManager.TileLayerIndices layerIndex)
     {
-        UpdateTools(GetItem?.Invoke());
+        Item item = null;
+        int count = 0;
+        if (GetItem != null)
+        {
+            (item, count) = GetItem.Invoke();
+        }
+        // TODO remove later
+        if (item == null)
+        {
+            count = int.MaxValue;
+        }
+        
+        UpdateTools(item);
 
-        Debug.Log($"{TileToBuildWith}, {BuildTool}, {BuildSpeed}");
+        //Debug.Log($"{item}, {BuildTool}, {BuildSpeed}");
 
         if (BuildTool == null || BuildSpeed < 0)
         {
@@ -76,16 +86,21 @@ public abstract class ModifyWorldController : MonoBehaviour, IConsumeSelectedIte
 
         if (!OnBuildCooldown)
         {
-            ModifyWorld.Build(position, layerIndex, BuildTool, TileToBuildWith);
+            var nTilesChanged = ModifyWorld.Build(position, layerIndex, BuildTool, TileToBuildWith, count);
+            //Debug.Log($"count: {count}, nTilesChanged: {nTilesChanged}");
             OnBuildCooldown = true;
             StartCoroutine(DoBuildCooldown(1 / (float)BuildSpeed));
-            OnConsume?.Invoke();  // TODO: pass in int saying how many to consume -- actually should check beforehand 
+            if (item != null)
+            {
+                //Debug.Log(item.GetInstanceID());
+                item.OnBuildWith(nTilesChanged);
+            }
         }
     }
 
     protected void TryDestruct(Vector2 position, GeneratorManager.TileLayerIndices layerIndex)
     {
-        UpdateTools(GetItem?.Invoke());
+        UpdateTools(GetItem?.Invoke().Item1);
 
         if (DestructTool == null || DestructSpeed < 0)
         {

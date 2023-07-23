@@ -25,24 +25,24 @@ public class ModifyWorld : MonoBehaviour
         Transform = transform;
     }
 
-    public void Build(Vector2 positionToBuildAt, GeneratorManager.TileLayerIndices layerIndex, ICarve tool, Tiles tileToBuildWith)
+    public int Build(Vector2 positionToBuildAt, GeneratorManager.TileLayerIndices layerIndex, ICarve tool, Tiles tileToBuildWith, int limit)
     {
         //Debug.Log($"{positionToBuildAt}, {layerIndex}, {tool}, {tileToBuildWith}");
 
         if (!_hasReceivedMap)
         {
-            return;
+            return 0;
         }
 
         if (Vector2.SqrMagnitude(positionToBuildAt - (Vector2)Transform.position) > Range * Range)
         {
-            return;
+            return 0;
         }
-        Debug.Log(positionToBuildAt);
-        Debug.Log("Map position: " + ChunkManager.ToMapPosition(positionToBuildAt));
+        //Debug.Log(positionToBuildAt);
+        //Debug.Log("Map position: " + ChunkManager.ToMapPosition(positionToBuildAt));
         GizmoAtMapPos.DrawGizmoAt(positionToBuildAt);
 
-        var affectedTiles = tool.Carve(positionToBuildAt, _layers[(int)layerIndex], tileToBuildWith, TileManager.Air);
+        var affectedTiles = tool.Carve(positionToBuildAt, _layers[(int)layerIndex], tileToBuildWith, TileManager.Air, limit);
 
         var affectedChunks = new HashSet<Vector2Int>();
         foreach ((var pos, var tile) in affectedTiles)
@@ -57,6 +57,7 @@ public class ModifyWorld : MonoBehaviour
         }
 
         BuiltAt?.Invoke(layerIndex, positionToBuildAt, affectedTiles);
+        return affectedTiles.Count;
     }
 
     public void Destruct(Vector2 positionToDestructAt, GeneratorManager.TileLayerIndices layerIndex, ICarve tool)
