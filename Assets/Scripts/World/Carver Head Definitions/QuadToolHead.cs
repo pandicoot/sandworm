@@ -13,7 +13,7 @@ public class QuadToolHead : CarverHead
     public bool XEven { get => PrimarySize % 2 == 0; }
     public bool YEven { get => SecondarySize % 2 == 0; }
 
-    public override HashSet<(Vector2Int, Tiles)> Carve(Vector2 position, SpatialArray<Tiles> map, Tiles tileToReplaceWith, HashSet<Tiles> tileDomain)
+    public override HashSet<(Vector2Int, Tiles)> Carve(Vector2 position, SpatialArray<Tiles> map, Tiles tileToReplaceWith, HashSet<Tiles> tileDomain, int limit = int.MaxValue)
     {
         Vector2 positionMap = ChunkManager.ToMapPosition(position);
 
@@ -46,10 +46,16 @@ public class QuadToolHead : CarverHead
         var tl = new Vector2Int(originatingPixel.x - xDistLeft, originatingPixel.y + yDistUp);
         var br = new Vector2Int(originatingPixel.x + xDistRight, originatingPixel.y - yDistDown);
 
+        int nTilesCarved = 0;
         for (var y = tl.y; y >= br.y; y--)
         {
             for (var x = tl.x; x <= br.x; x++)
             {
+                if (nTilesCarved >= limit)
+                {
+                    return affectedTiles;
+                }
+
                 if (!map.CheckInBounds(x, y))
                 {
                     return affectedTiles;
@@ -59,6 +65,7 @@ public class QuadToolHead : CarverHead
                 {
                     affectedTiles.Add((new Vector2Int(x,y), map.Get(x, y)));
                     map.Set(tileToReplaceWith, x, y);
+                    nTilesCarved++;
                 }
             }
         }

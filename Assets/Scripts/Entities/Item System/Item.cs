@@ -29,12 +29,14 @@ public sealed class Item : Prototype, IEquatable<Item>
         {
             if (_weaponComponent)
             {
+                UnsubscribeFromComponentEvents(_weaponComponent);
                 _components.Remove(_weaponComponent);
                 value.Item = null;
             }
 
             if (value)
             {
+                SubscribeToComponentEvents(value);
                 _components.Add(value);
                 value.Item = this;
             }
@@ -50,12 +52,14 @@ public sealed class Item : Prototype, IEquatable<Item>
         {
             if (_projectileComponent)
             {
+                UnsubscribeFromComponentEvents(_projectileComponent);
                 _components.Remove(_projectileComponent);
                 value.Item = null;
             }
 
             if (value)
             {
+                SubscribeToComponentEvents(value);
                 _components.Add(value);
                 value.Item = this;
             }
@@ -63,20 +67,22 @@ public sealed class Item : Prototype, IEquatable<Item>
         }
     }
 
-    [SerializeField] private ToolComponent _buildComponent;
-    public ToolComponent BuildComponent
+    [SerializeField] private BuildComponent _buildComponent;
+    public BuildComponent BuildComponent
     {
         get => _buildComponent;
         set
         {
             if (_buildComponent)
             {
+                UnsubscribeFromComponentEvents(_buildComponent);
                 _components.Remove(_buildComponent);
                 value.Item = null;
             }
 
             if (value)
             {
+                SubscribeToComponentEvents(value);
                 _components.Add(value);
                 value.Item = this;
             }
@@ -85,20 +91,22 @@ public sealed class Item : Prototype, IEquatable<Item>
     }
     [field: SerializeField] public Tiles TileToBuildWith { get; private set; }
 
-    [SerializeField] private ToolComponent _destructComponent;
-    public ToolComponent DestructComponent
+    [SerializeField] private DestructComponent _destructComponent;
+    public DestructComponent DestructComponent
     {
         get => _destructComponent;
         set
         {
             if (_destructComponent)
             {
+                UnsubscribeFromComponentEvents(_destructComponent);
                 _components.Remove(_destructComponent);
                 value.Item = null;
             }
 
             if (value)
             {
+                SubscribeToComponentEvents(value);
                 _components.Add(value);
                 value.Item = this;
             }
@@ -112,11 +120,52 @@ public sealed class Item : Prototype, IEquatable<Item>
         ProjectileComponent = _projectileComponent;
         BuildComponent = _buildComponent;
         DestructComponent = _destructComponent;
-        Debug.Log(Components.Count);
-        Debug.Log(Components);
+        //Debug.Log(Components.Count);
+        //Debug.Log(Components);
     }
 
-    public Action<Attack> OnAttackWith;
+    // TODO can push this into the component class and let them override it to do specialised subscriptions
+    private void SubscribeToComponentEvents(ItemComponent component)
+    {
+        if (component)
+        {
+            component.RequestRemoveItem += OnRequestRemove;
+        }
+    }
+    private void UnsubscribeFromComponentEvents(ItemComponent component)
+    {
+        if (component)
+        {
+            component.RequestRemoveItem -= OnRequestRemove;
+        }
+    }
+
+
+    public event Action<int> RequestRemove;
+    private void OnRequestRemove(int n) => RequestRemove?.Invoke(n);
+
+    // TODO change to methods
+    //public Action<Attack> OnAttackWith;
+    //public Action<int> OnBuildWith;
+    //public Action OnDestructWith;
+    //public Action OnUse;
+
+    public void OnAttackWith(Attack atk)
+    {
+        _components.ForEach(c => c.OnAttackWith(atk));
+    }
+    public void OnBuildWith(int n)
+    {
+        _components.ForEach(c => c.OnBuildWith(n));
+    }
+    public void OnDestructWith()
+    {
+        _components.ForEach(c => c.OnDestructWith());
+    }
+    public void OnUse()
+    {
+        _components.ForEach(c => c.OnUseWith());
+    }
 
     //public void AddComponent(ItemComponent newComponent) 
     //{
@@ -161,21 +210,25 @@ public sealed class Item : Prototype, IEquatable<Item>
         if (WeaponComponent != null)
         {
             var newWeaponComponent = (WeaponComponent)WeaponComponent.Clone();
+            //newWeaponComponent.DoRequestRemove = DoRequestRemove;  // FIXME I foresee race conditions, i.e. when multiple components call DoRequestRemove()
             newItem.WeaponComponent = newWeaponComponent;
         }
         if (ProjectileComponent != null)
         {
             var newProjectileComponent = (ProjectileComponent)ProjectileComponent.Clone();
+            //newProjectileComponent.DoRequestRemove = DoRequestRemove;
             newItem.ProjectileComponent = newProjectileComponent;
         }
         if (DestructComponent != null)
         {
-            var newDestructComponent = (ToolComponent)DestructComponent.Clone();
+            var newDestructComponent = (DestructComponent)DestructComponent.Clone();
+            //newDestructComponent.DoRequestRemove = DoRequestRemove;
             newItem.DestructComponent = newDestructComponent;
         }
         if (BuildComponent != null)
         {
-            var newBuildComponent = (ToolComponent)BuildComponent.Clone();
+            var newBuildComponent = (BuildComponent)BuildComponent.Clone();
+            //newBuildComponent.DoRequestRemove = DoRequestRemove;
             newItem.BuildComponent = newBuildComponent;
             newItem.TileToBuildWith = TileToBuildWith;
         }
@@ -282,7 +335,8 @@ public sealed class Item : Prototype, IEquatable<Item>
             Sprite != other.Sprite ||
             Description != other.Description ||
             !Tags.SequenceEqual(other.Tags) ||
-            StackLimit != other.StackLimit)
+            StackLimit != other.StackLimit ||
+            TileToBuildWith != other.TileToBuildWith)
         {
             return false;
         }
@@ -306,6 +360,7 @@ public sealed class Item : Prototype, IEquatable<Item>
         hash.Add(Description);
         hash.Add(Tags);
         hash.Add(StackLimit);
+        hash.Add(TileToBuildWith);
         hash.Add(WeaponComponent);
         hash.Add(ProjectileComponent);
         hash.Add(BuildComponent);

@@ -4,28 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Facing))]
-public class ActiveAttacker : MonoBehaviour, IAttacker
+public class ActiveAttacker : MonoBehaviour, IAttacker, IUseSelectedItem
 {
     public event Action<Attack> OnAttack;
+
+    //public event Action<Attack> OnTryAttackWith;
 
     public Transform Transform { get; private set; }
     public QuadtreeController QuadtreeController { get; set; }
     public EntityAttackStats AttackStats { get; private set; }
     [field: SerializeField] public EntityAttackStats BaseAttackStats { get; private set; }
     public EntityAttackStats WeaponAttackStats { get; private set; }
-    //[SerializeField] private CombatManager _combatManager;
     public Facing Facing { get; private set; }
-    public Inventories Inventories { get; private set; }
-    [field: SerializeField] private int _inventoryIdx { get; set; }
-    private Inventory _inventory { get; set; }
-
     public Attackable Attackable { get; private set; }
 
     public List<Attackable> Friendlies { get; set; } = new List<Attackable>();
 
     public bool OnCooldown { get; private set; }
 
-    public bool HasInventory { get => _inventory != null; }
+    [field: SerializeField] public int InventoryIdx { get; set; }
+    public Func<(Item, int)> GetItem { get; set; }
 
     private List<Attackable> _attackablesInRange = new List<Attackable>();
 
@@ -35,21 +33,7 @@ public class ActiveAttacker : MonoBehaviour, IAttacker
         Transform = transform;
         Attackable = GetComponent<Attackable>();
         Facing = GetComponent<Facing>();
-        Inventories = GetComponent<Inventories>();
     }
-
-    private void Start()
-    {
-        _inventory = Inventories.inventories[_inventoryIdx];
-    }
-
-    //private void OnEnable()
-    //{
-    //    //if (HasInventory)
-    //    //{
-    //    //    Inventory.ChangedSelectedItem += UpdateAttackStats;
-    //    //}
-    //}
 
     private IEnumerator DoCooldown(float duration)
     {
@@ -60,29 +44,27 @@ public class ActiveAttacker : MonoBehaviour, IAttacker
     // TODO: pass in attack as decided by the AttackController
     public void TryMakeAttack()
     {
-        if (_inventory.Selected == null)
+        var item = GetItem?.Invoke().Item1;
+        if (item == null)
         {
             AttackStats = BaseAttackStats;
         }
-        else if (_inventory.Selected.WeaponComponent == null)
+        else if (item.WeaponComponent == null)
         {
             AttackStats = BaseAttackStats;
         }
         else
         {
-            WeaponAttackStats = _inventory.Selected.WeaponComponent.AttackStats;
+            WeaponAttackStats = item.WeaponComponent.AttackStats;
             AttackStats = BaseAttackStats + WeaponAttackStats;  // todo: maybe needless instantiation here..
         }
-        //Debug.Log(Facing.Direction);
+
         Attack attack = new Attack(Attackable, Transform.position, Facing.Direction, AttackStats.BaseAttackRange, AttackStats.BaseAttackArcAngle, AttackStats.BaseAttackDamage, AttackStats.BaseKnockback);
-        //Debug.Log("active attacker invoked OnAttack!");
 
         // invoke any item-associated attack effects
         // TODO Decouple from ActiveAttacker class? Projectile component takes in info including gameObject, origin position, direction.
-        if (_inventory.Selected)
-        {
-            _inventory.Selected.OnAttackWith?.Invoke(attack);
-        }
+        if (item)
+            item.OnAttackWith(attack);
 
         if (!OnCooldown)
         {
@@ -102,10 +84,7 @@ public class ActiveAttacker : MonoBehaviour, IAttacker
                 }
             }
 
-
             OnAttack?.Invoke(attack);
-
-            //_combatManager.SendAttack(attack);  // replace with combatManager listening to OnAttack
 
             OnCooldown = true;
             StartCoroutine(DoCooldown(1 / (float)AttackStats.BaseAttackSpeed));
@@ -198,36 +177,4 @@ public class ActiveAttacker : MonoBehaviour, IAttacker
         Debug.DrawLine(br, bl, colour, 0.2f);
         Debug.DrawLine(bl, tl, colour, 0.2f);
     }
-
-    //private void Update()
-    //{
-    //    if (Inventory.Selected != null)
-    //    {
-    //        WeaponAttackStats = Inventory.Selected.WeaponComponent.AttackStats;
-    //        AttackStats = BaseAttackStats + WeaponAttackStats;
-    //    }
-    //    else
-    //    {
-    //        AttackStats = BaseAttackStats;
-    //    }
-    //}
-
-    //public void UpdateAttackStats(Item newHeldItem)
-    //{
-    //    if (newHeldItem == null)
-    //    {
-    //        AttackStats = BaseAttackStats;
-    //        return;
-    //    }
-    //    WeaponAttackStats = newHeldItem.WeaponComponent.AttackStats;
-    //    AttackStats = BaseAttackStats + WeaponAttackStats;  // todo: maybe needless instantiation here..
-    //}
-
-    //private void OnDisable()
-    //{
-    //    if (HasInventory)
-    //    {
-    //        Inventory.ChangedSelectedItem -= UpdateAttackStats;
-    //    }
-    //}
 }

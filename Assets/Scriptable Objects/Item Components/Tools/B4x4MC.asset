@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aac066b9c3f84b0a8ae9bc174943376, type: 3}
-  m_Name: TwoByTwo Medium
+  m_Script: {fileID: 11500000, guid: efb6cadc64eb9479c89ae81894575880, type: 3}
+  m_Name: B4x4MC
   m_EditorClassIdentifier: 
-  <Tool>k__BackingField: {fileID: 11400000, guid: 2179b9af708f94165aea28ddab331057, type: 2}
+  <Tool>k__BackingField: {fileID: 11400000, guid: 7ff1e49aad66447eaa9d0ccaf703b2b5, type: 2}
   <Speed>k__BackingField: 16
+  <ConsumeUponUse>k__BackingField: 1

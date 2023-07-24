@@ -16,7 +16,7 @@ public class RadialToolHead : CarverHead
 
     //[field: SerializeField] public bool IsEven { get => Radius % 2 == 0; }
 
-    public override HashSet<(Vector2Int, Tiles)> Carve(Vector2 position, SpatialArray<Tiles> map, Tiles tileToReplaceWith, HashSet<Tiles> tileDomain)
+    public override HashSet<(Vector2Int, Tiles)> Carve(Vector2 position, SpatialArray<Tiles> map, Tiles tileToReplaceWith, HashSet<Tiles> tileDomain, int limit = int.MaxValue)
     {
         Vector2 positionMap = ChunkManager.ToMapPosition(position);
 
@@ -26,10 +26,16 @@ public class RadialToolHead : CarverHead
         var tl = originPixel + new Vector2Int(-(PrimarySize - 1), PrimarySize - 1);
         var br = originPixel + new Vector2Int(PrimarySize - 1, -(PrimarySize - 1));
 
+        int nTilesCarved = 0;
         for (var y = tl.y; y >= br.y; y--)
         {
             for (var x = tl.x; x <= br.x; x++)
             {
+                if (nTilesCarved >= limit)
+                {
+                    return affectedTiles;
+                }
+
                 if (Vector2.SqrMagnitude(new Vector2(x, y) - originPixel) > PrimarySize * PrimarySize)
                 {
                     continue;
@@ -44,6 +50,7 @@ public class RadialToolHead : CarverHead
                 {
                     affectedTiles.Add((new Vector2Int(x ,y), map.Get(x, y)));
                     map.Set(tileToReplaceWith, x, y);
+                    nTilesCarved++;
                 }
             }
         }

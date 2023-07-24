@@ -27,7 +27,7 @@ public class ItemDisplay : MonoBehaviour
 
     private void Update()
     {
-        UpdateText(_playerInventories.inventories[_inventoryIdx].Selected);
+        UpdateText(_playerInventories.inventories[_inventoryIdx].GetSelected().Item1);
     }
 
     //private void OnEnable()

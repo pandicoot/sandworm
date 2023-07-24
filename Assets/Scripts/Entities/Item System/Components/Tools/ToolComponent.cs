@@ -3,16 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Tool Component", menuName = "Scriptable Objects/Item Components/Tool")]
-public class ToolComponent : ItemComponent, IEquatable<ToolComponent>
+
+public abstract class ToolComponent : ItemComponent, IEquatable<ToolComponent>
 {
-    private ToolComponent _originalData { get; set; }
+    protected ToolComponent _originalData { get; set; }
 
-    [field: SerializeField] public CarverHead Tool { get; private set; }
-    [field: SerializeField] public float Speed { get; private set; }
+    [field: SerializeField] public CarverHead Tool { get; protected set; }
+    [field: SerializeField] public float Speed { get; protected set; }
+    [field: SerializeField] public bool ConsumeUponUse { get; protected set; }
 
-    private Item _item;
-    public override Item Item { get => _item; set => _item = value; }
+    //public override Item Item { get => _item;
+    //    set
+    //    {
+    //        //if (_item)
+    //        //{
+    //        //    _item.OnBuildWith -= OnBuildWith;
+    //        //    _item.OnDestructWith -= OnDestructWith;
+    //        //}
+    //        //if (value)
+    //        //{
+    //        //    value.OnBuildWith += OnBuildWith;
+    //        //    value.OnDestructWith += OnDestructWith;
+    //        //}
+    //        _item = value;
+    //    }
+    //}
 
     //public ToolComponent(ToolComponentData data)
     //{
@@ -22,16 +37,6 @@ public class ToolComponent : ItemComponent, IEquatable<ToolComponent>
     //    Speed = OriginalData.Speed;
     //}
 
-    public override object Clone()
-    {
-        var newComponent = ScriptableObject.CreateInstance<ToolComponent>();
-        newComponent._originalData = this;
-        newComponent.Tool = Tool;
-        newComponent.Speed = Speed;
-
-        return newComponent;
-    }
-
     public override bool Equals(object other) => this.Equals(other as ToolComponent);
 
     public override int GetHashCode()
@@ -39,6 +44,7 @@ public class ToolComponent : ItemComponent, IEquatable<ToolComponent>
         HashCode hash = new HashCode();
         hash.Add(Tool.GetHashCode());
         hash.Add(Speed);
+        hash.Add(ConsumeUponUse);
         return hash.ToHashCode();
     }
 
@@ -53,7 +59,7 @@ public class ToolComponent : ItemComponent, IEquatable<ToolComponent>
             return false;
         }
 
-        return Tool == other.Tool && Speed == other.Speed;  
+        return Tool == other.Tool && Speed == other.Speed && ConsumeUponUse == other.ConsumeUponUse;  
     }
 
     public static bool operator ==(ToolComponent lhs, ToolComponent rhs)

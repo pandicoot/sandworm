@@ -10,7 +10,6 @@ public class Inventory
     public ItemStack[] Slots { get; private set; }
     public int InventorySize { get; protected set; }
 
-    public Item Selected { get; private set; }
     public int IndexOfSelectedItem { get; private set; }
 
     //private Item _prevSelected { get; set; }
@@ -27,49 +26,50 @@ public class Inventory
             Slots[i] = new ItemStack();
         }
         IndexOfSelectedItem = 0;
-        //_prevSelected = null;
-        Selected = null;
+        SubscribeToItemEvents(Slots[IndexOfSelectedItem].Item);
     }
 
-    public Item Select(int itemIdx)
+    private void SubscribeToItemEvents(Item item)
+    {
+        if (item)
+        {
+            item.RequestRemove += OnConsumeSelected;
+        }
+    }
+    private void UnsubscribeFromItemEvents(Item old)
+    {
+        if (old)
+        {
+            old.RequestRemove -= OnConsumeSelected;
+        }
+    }
+
+    public void Select(int itemIdx)
     {
         if (itemIdx < 0 || itemIdx >= InventorySize)
         {
-            return null;
+            throw new IndexOutOfRangeException("Item idx out of range");
         }
 
+        UnsubscribeFromItemEvents(Slots[IndexOfSelectedItem].Item);
         IndexOfSelectedItem = itemIdx;
-        if (Selected == Slots[itemIdx].Item)
-        {
-            return Selected;
-        }
-
-        Selected = Slots[itemIdx].Item;
-        //ChangedSelectedItem?.Invoke(Selected);
-        //_prevSelected = Selected;
-
-        return Selected;
+        SubscribeToItemEvents(Slots[itemIdx].Item);
+        //Debug.Log(Slots[IndexOfSelectedItem].Item.RequestRemove);
+        //Debug.Log(Slots[IndexOfSelectedItem].Item.GetInstanceID());
+        //Debug.Log(Slots[IndexOfSelectedItem].Item.GetInvocations());
     }
 
-    public int Select(Item item)
+    public void Select(Item item)
     {
         var idx = Array.FindIndex<ItemStack>(Slots, stack => stack.Item == item);
         if (idx < 0)
         {
-            return -1;
+            return;
         }
 
+        UnsubscribeFromItemEvents(Slots[IndexOfSelectedItem].Item);
         IndexOfSelectedItem = idx;
-        if (Selected == Slots[idx].Item)
-        {
-            return idx;
-        }
-
-        Selected = Slots[idx].Item;
-        //ChangedSelectedItem?.Invoke(Selected);
-        //_prevSelected = Selected;
-
-        return idx;
+        SubscribeToItemEvents(Slots[idx].Item);
     }
 
     public void HoldNextItem()
@@ -100,10 +100,10 @@ public class Inventory
         return itemStackAdd;
     }
 
-    public void UpdateInventory()
-    {
-        Selected = Slots[IndexOfSelectedItem].Item;
-    }
+    //public void UpdateInventory()
+    //{
+    //    Selected = Slots[IndexOfSelectedItem].Item;
+    //}
 
     //public void SwapStacks(int idx, ref ItemStack stack)
     //{
@@ -133,6 +133,26 @@ public class Inventory
 
         return Slots[idx].RemoveAll();
     }
+
+    public (Item, int) GetSelected()
+    {
+        return (Slots[IndexOfSelectedItem].Item, Slots[IndexOfSelectedItem].Count);
+    }
+
+    private void OnConsumeSelected(int numToremove)
+    {
+        //Debug.Log($"trying to consume {numToremove} of {Slots[IndexOfSelectedItem].Item}");
+        RemoveItem(IndexOfSelectedItem, numToremove);
+    }
+
+    //public void OnAttackWith(Attack attack)
+    //{
+    //    var item = Slots[IndexOfSelectedItem].Item;
+    //    if (item)
+    //    {
+    //        item.OnAttackWith?.Invoke(attack);
+    //    }
+    //}
 
     //public void SwapItem(int idxFrom, int idxTo)
     //{

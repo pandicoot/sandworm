@@ -1,46 +1,23 @@
+using System;
+
 public abstract class ItemComponent : Prototype
 {
-    public abstract Item Item { get; set; }
+    protected Item _item;
+    public virtual Item Item { get => _item; set => _item = value; }
 
     //private IItemComponentData _originalData;
     //public abstract IItemComponentData OriginalData { get; set; }
 
     public ItemComponent() { }
 
-    //public virtual void OnAcquire()
-    //{
+    public event Action<int> RequestRemoveItem;
+    protected void OnRequestRemoveItem(int n)
+    {
+        RequestRemoveItem?.Invoke(n);
+    }
 
-    //}
-    //public virtual void OnDrop()
-    //{
-
-    //}
-    //public virtual void WhileInInventory()
-    //{
-
-    //}
-    //public virtual void WhileInHotbar()
-    //{
-
-    //}
-    //public virtual void WhileHeld()
-    //{
-
-    //}
-    //public virtual void OnPrimaryUseWith()
-    //{
-
-    //}
-    //public virtual void OnSecondaryUseWith()
-    //{
-
-    //}
-    //public virtual void WhilePrimaryUseWith()
-    //{
-
-    //}
-    //public virtual void WhileSecondaryUseWith()
-    //{
-
-    //}
+    public virtual void OnAttackWith(Attack atk) { }
+    public virtual void OnBuildWith(int n) { }
+    public virtual void OnDestructWith() { }
+    public virtual void OnUseWith() { }
 }
