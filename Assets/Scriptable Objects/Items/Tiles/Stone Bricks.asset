@@ -19,6 +19,6 @@ MonoBehaviour:
   <StackLimit>k__BackingField: 99
   _weaponComponent: {fileID: 0}
   _projectileComponent: {fileID: 0}
-  _buildComponent: {fileID: 11400000, guid: bd371bc628190470c964cb3ed8c0027d, type: 2}
+  _buildComponent: {fileID: 11400000, guid: 69936aef955614e4198e077261bd18b7, type: 2}
   <TileToBuildWith>k__BackingField: 7
   _destructComponent: {fileID: 0}

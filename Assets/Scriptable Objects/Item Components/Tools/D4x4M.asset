@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd008046f75264be28fc503bc64d54bb, type: 3}
   m_Name: D4x4M
   m_EditorClassIdentifier: 
-  <Tool>k__BackingField: {fileID: 0}
-  <Speed>k__BackingField: 0
+  <Tool>k__BackingField: {fileID: 11400000, guid: 7ff1e49aad66447eaa9d0ccaf703b2b5, type: 2}
+  <Speed>k__BackingField: 16
   <ConsumeUponUse>k__BackingField: 0
