@@ -80,6 +80,24 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""do_raycast"",
+                    ""type"": ""Button"",
+                    ""id"": ""c87ca580-0b2b-49f4-b423-f59fcd6e08be"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""show_pointer_over_game_obj"",
+                    ""type"": ""Button"",
+                    ""id"": ""967c0718-6971-4b43-a827-0ff26ad2d40e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -190,6 +208,28 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""mouse_scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c7b412e-0395-43b2-9760-e7268038ded3"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""do_raycast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""be8cc622-8830-4da8-85cb-299dde0b5dea"",
+                    ""path"": ""<Keyboard>/semicolon"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""show_pointer_over_game_obj"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -662,6 +702,8 @@ public partial class @Actions : IInputActionCollection2, IDisposable
         m_gameplay_jump = m_gameplay.FindAction("jump", throwIfNotFound: true);
         m_gameplay_mouse_position = m_gameplay.FindAction("mouse_position", throwIfNotFound: true);
         m_gameplay_mouse_scroll = m_gameplay.FindAction("mouse_scroll", throwIfNotFound: true);
+        m_gameplay_do_raycast = m_gameplay.FindAction("do_raycast", throwIfNotFound: true);
+        m_gameplay_show_pointer_over_game_obj = m_gameplay.FindAction("show_pointer_over_game_obj", throwIfNotFound: true);
         // ui
         m_ui = asset.FindActionMap("ui", throwIfNotFound: true);
         m_ui_toggle_inventory = m_ui.FindAction("toggle_inventory", throwIfNotFound: true);
@@ -753,6 +795,8 @@ public partial class @Actions : IInputActionCollection2, IDisposable
     private readonly InputAction m_gameplay_jump;
     private readonly InputAction m_gameplay_mouse_position;
     private readonly InputAction m_gameplay_mouse_scroll;
+    private readonly InputAction m_gameplay_do_raycast;
+    private readonly InputAction m_gameplay_show_pointer_over_game_obj;
     public struct GameplayActions
     {
         private @Actions m_Wrapper;
@@ -763,6 +807,8 @@ public partial class @Actions : IInputActionCollection2, IDisposable
         public InputAction @jump => m_Wrapper.m_gameplay_jump;
         public InputAction @mouse_position => m_Wrapper.m_gameplay_mouse_position;
         public InputAction @mouse_scroll => m_Wrapper.m_gameplay_mouse_scroll;
+        public InputAction @do_raycast => m_Wrapper.m_gameplay_do_raycast;
+        public InputAction @show_pointer_over_game_obj => m_Wrapper.m_gameplay_show_pointer_over_game_obj;
         public InputActionMap Get() { return m_Wrapper.m_gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -790,6 +836,12 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                 @mouse_scroll.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse_scroll;
                 @mouse_scroll.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse_scroll;
                 @mouse_scroll.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse_scroll;
+                @do_raycast.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDo_raycast;
+                @do_raycast.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDo_raycast;
+                @do_raycast.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDo_raycast;
+                @show_pointer_over_game_obj.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShow_pointer_over_game_obj;
+                @show_pointer_over_game_obj.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShow_pointer_over_game_obj;
+                @show_pointer_over_game_obj.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShow_pointer_over_game_obj;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -812,6 +864,12 @@ public partial class @Actions : IInputActionCollection2, IDisposable
                 @mouse_scroll.started += instance.OnMouse_scroll;
                 @mouse_scroll.performed += instance.OnMouse_scroll;
                 @mouse_scroll.canceled += instance.OnMouse_scroll;
+                @do_raycast.started += instance.OnDo_raycast;
+                @do_raycast.performed += instance.OnDo_raycast;
+                @do_raycast.canceled += instance.OnDo_raycast;
+                @show_pointer_over_game_obj.started += instance.OnShow_pointer_over_game_obj;
+                @show_pointer_over_game_obj.performed += instance.OnShow_pointer_over_game_obj;
+                @show_pointer_over_game_obj.canceled += instance.OnShow_pointer_over_game_obj;
             }
         }
     }
@@ -1050,6 +1108,8 @@ public partial class @Actions : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnMouse_position(InputAction.CallbackContext context);
         void OnMouse_scroll(InputAction.CallbackContext context);
+        void OnDo_raycast(InputAction.CallbackContext context);
+        void OnShow_pointer_over_game_obj(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {

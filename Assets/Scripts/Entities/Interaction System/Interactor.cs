@@ -14,6 +14,7 @@ public class Interactor : MonoBehaviour
     [field: SerializeField] public float RangeToInteractWith { get; private set; }
     public Bounds InteractorBounds { get => new Bounds(Transform.position, new Vector2(RangeToInteractWith * 2, RangeToInteractWith * 2)); }
 
+
     private void Awake()
     {
         Transform = transform;

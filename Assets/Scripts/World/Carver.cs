@@ -72,7 +72,7 @@ public class Carver
         _expectedTotalDistance = _expectedNSteps * carverParameters.MeanNodeDistance * _probabilityThreshold;
 
         _noiseMap = _noiseGen.Generate(Mathf.CeilToInt(_nStepCyclesForNoiseGen * _expectedNSteps));
-        Debug.Log(_noiseMap);
+        //Debug.Log(_noiseMap);
     }
 
     public Carver(SpatialArray<Tiles> world, int[] surfaceLevels, float amplitude, Tiles tileToSet, Vector2 position, float orientation, CarverParameters carverParameters, CarverHead head, CarverHeadParameters headParams)
@@ -187,8 +187,8 @@ public class Carver
         var radiusAdj = _carverHeadParameters.CarvingNoiseCurve.Evaluate(_noiseMap[nSteps % _noiseMap.Length]) * _carverHeadParameters.CarvingRadiusMaxSpread;
         var radius = Mathf.RoundToInt(_amplitude * (_carverHeadParameters.MinCarvingRadius + radiusAdj));
 
-        Debug.Log($"Number of steps: {nSteps}");
-        Debug.Log($"unmoderated noise: {noiseLevelUnmod}; noise: {noiseLevel}; radius adjustment: {radiusAdj}; radius: {radius}");
+        //Debug.Log($"Number of steps: {nSteps}");
+        //Debug.Log($"unmoderated noise: {noiseLevelUnmod}; noise: {noiseLevel}; radius adjustment: {radiusAdj}; radius: {radius}");
 
         _carverHead.PrimarySize = radius;
         var affectedTiles = _carverHead.Carve(ChunkManager.ToWorldPosition(carveAtPos), _world, TileToSet, TileManager.AllPhysicalTiles);
